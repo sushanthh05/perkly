@@ -20,15 +20,8 @@ import { useStudentAuth } from "@/hooks/useStudentAuth";
 const formSchema = z.object({
   email: z
     .string()
-    .email("Please enter a valid email")
-    .refine(
-      (val) =>
-        val.endsWith(".ac.in") ||
-        val.endsWith(".edu.in") ||
-        val.includes("@student."),
-      { message: "Must be a valid Indian student/college email" }
-    ),
-  studentId: z.string().min(5, "Student ID must be at least 5 characters"),
+    .email("Please enter a valid email address"),
+  studentId: z.string().min(3, "Student ID must be at least 3 characters"),
 });
 
 export default function StudentVerifyForm() {
@@ -47,39 +40,38 @@ export default function StudentVerifyForm() {
     // Mock delay (simulating API)
     await new Promise((r) => setTimeout(r, 800));
 
-    // Mock success condition
-    if (values.email.endsWith(".ac.in") || values.email.endsWith(".edu.in")) {
-      login({
-        verified: true,
-        email: values.email,
-        name: values.email.split("@")[0],
-      });
+    // Accept any valid email and student ID
+    login({
+      verified: true,
+      email: values.email,
+      name: values.email.split("@")[0],
+    });
 
-      // Success toast with Sonner
-      toast.success("Verification Successful!", {
-        description: "Welcome! Redirecting to dashboard...",
-      });
+    // Success toast with Sonner
+    toast.success("Verification Successful!", {
+      description: "Welcome! Redirecting to dashboard...",
+    });
 
-      router.push("/dashboard");
-    } else {
-      // Error toast with Sonner
-      toast.error("Verification Failed", {
-        description: "Please use a valid student email.",
-      });
-    }
+    // Small delay to ensure state has updated before navigation
+    await new Promise((r) => setTimeout(r, 100));
+    router.replace("/dashboard");
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>College Email</FormLabel>
+              <FormLabel className="text-slate-200 text-sm">Email Address</FormLabel>
               <FormControl>
-                <Input placeholder="yourname@college.ac.in" {...field} />
+                <Input
+                  placeholder="your.email@example.com"
+                  {...field}
+                  className="h-10 bg-slate-900/50 border-slate-600/50 text-slate-100 placeholder:text-slate-500 focus:border-cyan-300/50 transition-colors rounded-lg"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -91,9 +83,13 @@ export default function StudentVerifyForm() {
           name="studentId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Student ID / Roll Number</FormLabel>
+              <FormLabel className="text-slate-200 text-sm">Student ID / Roll Number</FormLabel>
               <FormControl>
-                <Input placeholder="e.g. 22BCE1234" {...field} />
+                <Input
+                  placeholder="e.g. 22BCE1234"
+                  {...field}
+                  className="h-10 bg-slate-900/50 border-slate-600/50 text-slate-100 placeholder:text-slate-500 focus:border-emerald-300/50 transition-colors rounded-lg"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -102,7 +98,7 @@ export default function StudentVerifyForm() {
 
         <Button
           type="submit"
-          className="w-full"
+          className="w-full h-10 rounded-lg bg-gradient-to-r from-cyan-500 to-emerald-500 text-white hover:from-cyan-400 hover:to-emerald-400 transition-all duration-300 shadow-lg shadow-cyan-500/20 font-medium text-sm"
           disabled={form.formState.isSubmitting}
         >
           {form.formState.isSubmitting ? "Verifying..." : "Verify & Continue"}

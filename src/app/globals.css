@@ -80,6 +80,13 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* Animation timing tokens */
+  --animate-duration-fast: 300ms;
+  --animate-duration: 600ms;
+  --animate-duration-slow: 1200ms;
+  --animate-easing: cubic-bezier(0.4, 0, 0.2, 1);
+  --animate-play-state: running;
 }
 
 .dark {
@@ -114,6 +121,22 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+
+  /* Animation timing tokens */
+  --animate-duration-fast: 300ms;
+  --animate-duration: 600ms;
+  --animate-duration-slow: 1200ms;
+  --animate-easing: cubic-bezier(0.4, 0, 0.2, 1);
+  --animate-play-state: running;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --animate-play-state: paused;
+    --animate-duration-fast: 0.01ms;
+    --animate-duration: 0.01ms;
+    --animate-duration-slow: 0.01ms;
+  }
 }
 
 @layer base {
@@ -126,4 +149,165 @@
   html {
     @apply font-sans;
   }
+}
+
+@layer utilities {
+  .perkly-grid-bg {
+    background-image:
+      linear-gradient(to right, hsl(var(--muted) / 0.08) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--muted) / 0.08) 1px, transparent 1px);
+    background-size: 2rem 2rem;
+  }
+
+  .animate-fade-up {
+    animation: fadeUp var(--animate-duration, 800ms) var(--animate-easing, cubic-bezier(0.4, 0, 0.2, 1)) both;
+  }
+
+  .animate-float-slow {
+    animation: float var(--animate-duration-slow, 12s) ease-in-out infinite;
+    animation-play-state: var(--animate-play-state, running);
+  }
+
+  .animate-gradient-x {
+    animation: gradientShift var(--animate-duration-fast, 3s) ease-in-out infinite;
+    background-size: 200% 100%;
+    animation-play-state: var(--animate-play-state, running);
+  }
+
+  /* Consolidated glow effect using CSS custom properties */
+  .hover-glow {
+    --glow-color: hsl(var(--primary));
+    transition: box-shadow var(--animate-duration-fast, 300ms) ease;
+  }
+
+  .hover-glow:hover {
+    box-shadow: 0 0 1.5rem color-mix(in srgb, var(--glow-color) 20%, transparent);
+  }
+
+  .hover-glow-cyan { --glow-color: hsl(185 97% 56%); }
+  .hover-glow-emerald { --glow-color: hsl(158 74% 48%); }
+
+  /* Glass morphism using design tokens */
+  .glass-effect {
+    background: hsl(var(--background) / 0.6);
+    backdrop-filter: blur(8px) saturate(150%);
+    border: 1px solid hsl(var(--border) / 0.8);
+  }
+
+  /* Shimmer with reduced memory footprint */
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      hsl(var(--muted) / 0.04),
+      transparent
+    );
+    background-size: 150% 100%;
+    animation: shimmer var(--animate-duration, 1.5s) ease-in-out infinite;
+  }
+
+  /* Smooth scaling for interactive elements */
+  .scale-hover {
+    transition: transform var(--animate-duration-fast, 300ms) var(--animate-easing, cubic-bezier(0.4, 0, 0.2, 1));
+    will-change: transform;
+  }
+
+  .scale-hover:hover {
+    transform: scale(1.02);
+  }
+
+  /* Enhanced focus states using design tokens */
+  .focus-visible:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 4px;
+    border-radius: var(--radius);
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-fade-up,
+    .animate-float-slow,
+    .animate-gradient-x,
+    .shimmer {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
+
+    .scale-hover {
+      transform: none !important;
+    }
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-0.375rem) rotate(0.3deg);
+  }
+  50% {
+    transform: translateY(-0.5rem) rotate(0deg);
+  }
+  75% {
+    transform: translateY(-0.375rem) rotate(-0.3deg);
+  }
+}
+
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -150% 0;
+  }
+  100% {
+    background-position: 150% 0;
+  }
+}
+
+/* Enhanced smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar using design tokens */
+::-webkit-scrollbar {
+  width: 0.375rem;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, hsl(185 84% 60%), hsl(158 68% 50%));
+  border-radius: var(--radius-sm);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, hsl(185 84% 50%), hsl(158 68% 40%));
+}
+
+/* Firefox scrollbar */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(185 84% 60%) hsl(var(--background));
 }

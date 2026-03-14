@@ -20,16 +20,30 @@ export default function DashboardPage() {
   }));
 
   return (
-    <div className="container py-10">
-      <div className="max-w-5xl mx-auto">
-        <h1 className="text-4xl font-bold mb-2">Student Perks Dashboard</h1>
-        <p className="text-xl text-muted-foreground mb-10">
-          Choose a category to explore exclusive offers
-        </p>
+    <div className="relative min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100">
+      <div className="pointer-events-none absolute inset-0 perkly-grid-bg opacity-15" />
+      <div className="pointer-events-none absolute -top-40 right-1/4 h-80 w-80 rounded-full bg-cyan-400/10 blur-3xl animate-float-slow" />
+      <div className="pointer-events-none absolute -bottom-40 left-1/4 h-80 w-80 rounded-full bg-emerald-400/8 blur-3xl animate-float-slow [animation-delay:3s]" />
+
+      <div className="relative mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
+        <div className="text-center mb-12 animate-fade-up">
+          <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-cyan-200 via-emerald-200 to-amber-200 bg-clip-text text-transparent lg:text-5xl">
+            Student Perks Dashboard
+          </h1>
+          <p className="text-lg text-slate-400 max-w-2xl mx-auto">
+            Choose a category to explore exclusive offers tailored for Indian students
+          </p>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {counts.map((cat) => (
-            <CategoryCard key={cat.slug} category={cat} />
+          {counts.map((cat, index) => (
+            <div
+              key={cat.slug}
+              className="animate-fade-up"
+              style={{ animationDelay: `${index * 0.08}s` }}
+            >
+              <CategoryCard category={cat} />
+            </div>
           ))}
         </div>
       </div>

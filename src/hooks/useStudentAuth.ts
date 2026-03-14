@@ -42,11 +42,16 @@ export function useStudentAuth() {
 
   // Auto-redirect if trying to access protected route without verification
   useEffect(() => {
+    // Don't redirect if we're already on verify page or if student state hasn't loaded yet
+    if (pathname === "/verify" || student === null) return;
+
     const protectedPaths = ["/dashboard", "/claimed", "/profile"];
-    if (protectedPaths.some((p) => pathname.startsWith(p)) && !isVerified) {
+    const isProtectedPath = protectedPaths.some((p) => pathname.startsWith(p));
+
+    if (isProtectedPath && !isVerified) {
       router.replace("/verify");
     }
-  }, [pathname, isVerified, router]);
+  }, [pathname, isVerified, router, student]);
 
   return {
     isVerified,
