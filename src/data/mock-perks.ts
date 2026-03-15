@@ -7,6 +7,7 @@ export interface Perk {
   category: string;
   image?: string;
   link?: string;
+  code?: string;
   howTo: string;
 }
 
@@ -18,6 +19,7 @@ export const mockPerks: Perk[] = [
     description: "Individual plan at student price",
     discount: "₹59/month",
     category: "entertainment",
+    link: "https://www.spotify.com/in/student/",
     howTo: "Verify on Spotify student page",
   },
   {
@@ -27,6 +29,7 @@ export const mockPerks: Perk[] = [
     description: "6 months free, then half price",
     discount: "₹749/year",
     category: "ecommerce",
+    link: "https://www.amazon.in/joinstudent",
     howTo: "Sign up with student email",
   },
   {
@@ -36,6 +39,7 @@ export const mockPerks: Perk[] = [
     description: "Free credits, domains, tools",
     discount: "Free pack worth $1000+",
     category: "tech-software",
+    link: "https://education.github.com/pack",
     howTo: "Apply via GitHub Education",
   },
   {
@@ -45,6 +49,8 @@ export const mockPerks: Perk[] = [
     description: "Extra discounts + free delivery",
     discount: "Up to 40% off",
     category: "food-drink",
+    code: "ZOMATOSTUDENT",
+    link: "https://www.zomato.com/",
     howTo: "Check in-app student section",
   },
   {
@@ -54,6 +60,8 @@ export const mockPerks: Perk[] = [
     description: "Extra 10-20% off on fashion",
     discount: "10–30% extra",
     category: "fashion-lifestyle",
+    code: "MYNTRASTUDENT",
+    link: "https://www.myntra.com/",
     howTo: "Apply code at checkout",
   },
   {
@@ -63,6 +71,7 @@ export const mockPerks: Perk[] = [
     description: "All apps for students",
     discount: "₹1,299/month",
     category: "tech-software",
+    link: "https://www.adobe.com/in/creativecloud/buy/students.html",
     howTo: "Verify via SheerID",
   },
   // add 10–20 more later
