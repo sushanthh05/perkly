@@ -18,6 +18,21 @@ export default function CategoryPerksClient({ category, perks }: CategoryPerksCl
   const [selectedPerk, setSelectedPerk] = useState<Perk | null>(null);
   const title = formatCategoryName(category);
 
+  function handleClaim(perk: Perk) {
+    setSelectedPerk(perk);
+
+    const storageKey = "claimedPerkIds";
+    const raw = localStorage.getItem(storageKey);
+
+    try {
+      const ids = raw ? (JSON.parse(raw) as number[]) : [];
+      const next = ids.includes(perk.id) ? ids : [...ids, perk.id];
+      localStorage.setItem(storageKey, JSON.stringify(next));
+    } catch {
+      localStorage.setItem(storageKey, JSON.stringify([perk.id]));
+    }
+  }
+
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100">
       <div className="pointer-events-none absolute inset-0 perkly-grid-bg opacity-15" />
@@ -53,7 +68,7 @@ export default function CategoryPerksClient({ category, perks }: CategoryPerksCl
               className="animate-fade-up"
               style={{ animationDelay: `${index * 0.08}s` }}
             >
-              <PerkCard perk={perk} onClaim={setSelectedPerk} />
+              <PerkCard perk={perk} onClaim={handleClaim} />
             </div>
           ))}
         </div>
